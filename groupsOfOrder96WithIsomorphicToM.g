@@ -1,0 +1,11 @@
+S3 := Group([(1,2),(1,2,3)]);
+C8 := Group((1,2,3,4,5,6,7,8));
+W := DirectProduct(S3,C8);
+Wgens := GeneratorsOfGroup(W);
+alpha := GroupHomomorphismByImages(W,W,Wgens,[(1,2)(4,8)(5,9)(6,10)(7,11),(1,2,3),(4,5,6,7,8,9,10,11)]);
+C2 := Group((1,2));
+sdp1 := GroupHomomorphismByImages(C2,AutomorphismGroup(W),[(1,2)],[alpha]);
+G:= SemidirectProduct(C2,sdp1,W);
+beta := GroupHomomorphismByImages(W,W,Wgens,[(1,2)(4,8)(5,9)(6,10)(7,11),(1,2,3),(4,9,6,11,8,5,10,7)]);
+sdp2 := GroupHomomorphismByImages(C2,AutomorphismGroup(W),[(1,2)],[beta]);
+Q := SemidirectProduct(C2,sdp2,W);
