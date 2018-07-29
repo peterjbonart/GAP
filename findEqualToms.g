@@ -81,7 +81,7 @@ local i , index;
             fi;
         fi;
     od;
-    return Length(multiset[1]) = Length(multiset[2]);
+    return Length(multiset1[1]) = Length(multiset2[1]);
 end;
 
 #If transpose is true, then this function returns
