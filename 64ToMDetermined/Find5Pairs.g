@@ -1,13 +1,12 @@
 
 Find5Pairs := function() 
-	return findEqualToms(64,[2,4]);
+	return findEqualToms(64);
 end;
-
 
 #This function returns a list of pairs of groups of a specified order
 #whose tables of marks have the same number of x's in them
-#for every x in the list restriction.
-findEqualToms := function(order, restriction)
+#for every x.
+findEqualToms := function(order)
 local tomList, tomList2, t1, t2, res;
     res := [];
     tomList := getAllTableOfMarks(order);
@@ -15,7 +14,7 @@ local tomList, tomList2, t1, t2, res;
     for t1 in tomList do
         Remove(tomList2,1);
         for t2 in tomList2 do
-            if matrixEntryTest(t1[1],t2[1],restriction) then
+            if matrixEntryTest(t1[1],t2[1]) then
                 Add(res,[t1[2],t2[2]]);
             fi;
         od;
@@ -24,12 +23,12 @@ local tomList, tomList2, t1, t2, res;
 end;
 
 #Tests whether the entries of tom1 and tom2 have the same number of x's
-#in them for every x in the list restriction.
-matrixEntryTest := function(tom1, tom2, restriction)
+#in them for every x.
+matrixEntryTest := function(tom1, tom2)
 local multiset1, multiset2;
     multiset1 := listToMultiset(union(MarksTom(tom1)));
     multiset2 := listToMultiset(union(MarksTom(tom2)));
-    return multisetEquality(multiset1, multiset2, restriction);
+    return multisetEquality(multiset1, multiset2);
 end;
 
 
@@ -55,11 +54,11 @@ local elements, multiplicity, x, index;
     return [elements,multiplicity];
 end;
 
-#Takes two multisets and returns true if and only if for each x in restriction
+#Takes two multisets and returns true if and only if for each x
 #the multiset contain the same amounts of x's.
-multisetEquality := function(multiset1, multiset2,restriction)
+multisetEquality := function(multiset1, multiset2)
 local x, index1, index2;
-    for x in restriction do
+    for x in multiset1[1] do
 		index1 := Position(multiset1[1],x);
 		index2 := Position(multiset2[1],x);
 		if (index1 = fail) or (index2 = fail) then
@@ -72,7 +71,7 @@ local x, index1, index2;
 			fi;
 		fi;
 	od;
-    return true;
+    return Length(multiset1[1]) = Length(multiset2[1]);
 end;
 
 #This function creates a list of the table of marks of all groups
