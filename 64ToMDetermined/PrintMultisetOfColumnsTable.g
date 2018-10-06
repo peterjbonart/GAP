@@ -2,6 +2,7 @@
 #Takes a pair of group.
 #Creates a table representing the multiset of columns of the two groups.
 PrintMultisetOfColumnsTable := function(groupPair, printColumnsNotRows)
+local multiset1, multiset2;
 	multiset1 := multisetOfAllColumns(TableOfMarks(groupPair[1]),printColumnsNotRows);
 	multiset2 := multisetOfAllColumns(TableOfMarks(groupPair[2]),printColumnsNotRows);
 	printPairAsLatex(multiset1,multiset2);
@@ -126,10 +127,18 @@ local combinedElements, x, otherElement, element, pair;
 			Print(x);
 			Print(" &");
 		od;
-		Print(getMultiplicity(multiset1,pair));
-		Print(" &");
-		Print(getMultiplicity(multiset2,pair));
-		Print("\\\\");
+		if getMultiplicity(multiset1,pair) = getMultiplicity(multiset2,pair) then 
+			Print(getMultiplicity(multiset1,pair));
+			Print(" &");
+			Print(getMultiplicity(multiset2,pair));
+			Print("\\\\");
+		else
+			Print("\\underline\{");
+			Print(getMultiplicity(multiset1,pair));
+			Print("\} & \\underline\{");
+			Print(getMultiplicity(multiset2,pair));
+			Print("\}\\\\");
+		fi;
 	od;
 end;
 getMultiplicity := function(multiset, element)
