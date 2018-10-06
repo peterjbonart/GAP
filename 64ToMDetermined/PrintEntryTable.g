@@ -11,14 +11,37 @@ local groupList, i;
 	od;
 end;
 
+#Returns a list containing all the multisets of entries of the tables of marks of the groups of the specified order
+getAllEntryMultisets := function(order)
+local result, group;
+	result := [];
+	for group in AllSmallGroups(order) do
+		Add(result,multisetOfEntries(group));
+	od;
+	return result;
+end;
+
 #Calculates multisets of entries of groups of the specified order
 #But this function prints the output in a way
 #that it can easily be included in a latex document
 #The latex document needs to use "\usepackage{longtable}"
 #This function requires a list "relevantValues" to tell
 #how the columns of the table should be labelled and in which order
-printEntriesLatex := function(order, relevantValues)
-local i, j, entries, index, groupList;
+printEntriesLatex := function(order)
+local i, j, entries, entryList, index, relevantValues, multiset, value;
+	entryList := getAllEntryMultisets(order);
+	
+	#Find out which values appear in Tables of Marks at all
+	relevantValues := [];
+	for multiset in entryList do 
+		for value in multiset[1] do 
+			if not value in relevantValues then
+				Add(relevantValues,value);
+			fi;
+		od;
+	od;
+	Sort(relevantValues);
+	
 	#Print first two latex lines
 	Print("\\begin\{longtable\}\{c");
 	for i in relevantValues do 
@@ -33,10 +56,9 @@ local i, j, entries, index, groupList;
 	Print("\\\\\n");
 	
 	#Print actual table data
-	groupList := AllSmallGroups(order);
-	for j in [1..Length(groupList)] do 
+	for j in [1..Length(entryList)] do 
 		Print(j);
-		entries := multisetOfEntries(groupList[j]);
+		entries := entryList[j];
 		for i in relevantValues do
 			Print(" \& ");
 			index := Position(entries[1],i);
